@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ToolBox Pro - Free online tools for image compression, PDF compression, ZIP extraction, and YouTube MP3 download. Fast, secure, and easy to use.">
+  <meta name="keywords" content="image compressor, pdf compressor, zip extractor, youtube mp3 downloader, online tools">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="ToolBox Pro - All-in-One File Tools">
+  <meta property="og:description" content="Compress images, optimize PDFs, extract ZIP files, and download YouTube audio — all in one place.">
+  <meta property="og:type" content="website">
+  <title>ToolBox Pro — All-in-One File Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <div class="brand-icon" aria-hidden="true">
+          <i class="fas fa-toolbox"></i>
+        </div>
+        <span class="brand-name">ToolBox <span class="brand-pro">Pro</span></span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#tools" class="nav-link" aria-label="Go to Tools section">Tools</a>
+        <a href="#features" class="nav-link" aria-label="Go to Features section">Features</a>
+        <a href="#how-it-works" class="nav-link" aria-label="Go to How it works section">How It Works</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero" role="banner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="fas fa-shield-halved"></i>
+        <span>100% Secure &amp; Private</span>
+      </div>
+      <h1 class="hero-title">
+        Your All-in-One
+        <span class="gradient-text">File Toolbox</span>
+      </h1>
+      <p class="hero-subtitle">
+        Compress images &amp; PDFs, extract ZIP archives, and download YouTube audio — all in one powerful, privacy-first platform.
+      </p>
+      <div class="hero-stats" role="list">
+        <div class="stat-item" role="listitem">
+          <span class="stat-number" id="stat-users">0</span>
+          <span class="stat-label">Users Served</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-number" id="stat-ops">0</span>
+          <span class="stat-label">Files Processed</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-number" id="stat-saved">0 MB</span>
+          <span class="stat-label">Data Saved</span>
+        </div>
+      </div>
+      <div class="hero-cta">
+        <a href="#tools" class="btn-primary" id="hero-start-btn">
+          <i class="fas fa-rocket"></i>
+          Start For Free
+        </a>
+        <a href="#how-it-works" class="btn-ghost">
+          <i class="fas fa-play-circle"></i>
+          See How It Works
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="floating-card card-1">
+        <i class="fas fa-image"></i>
+        <div class="card-info">
+          <span>Photo.jpg</span>
+          <small>3.2MB → 800KB</small>
+        </div>
+        <div class="savings-badge">-75%</div>
+      </div>
+      <div class="floating-card card-2">
+        <i class="fas fa-file-pdf"></i>
+        <div class="card-info">
+          <span>Report.pdf</span>
+          <small>12MB → 4MB</small>
+        </div>
+        <div class="savings-badge">-67%</div>
+      </div>
+      <div class="floating-card card-3">
+        <i class="fab fa-youtube"></i>
+        <div class="card-info">
+          <span>Song.mp3</span>
+          <small>Downloaded</small>
+        </div>
+        <div class="savings-badge green"><i class="fas fa-check"></i></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Tools Section -->
+  <main id="tools">
+    <div class="section-header">
+      <span class="section-badge">Powerful Tools</span>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-subtitle">Professional-grade file processing tools, free for everyone</p>
+    </div>
+
+    <!-- Tool Tabs -->
+    <div class="tool-tabs" role="tablist" aria-label="File tools">
+      <button class="tab-btn active" id="tab-image" role="tab" aria-selected="true" aria-controls="panel-image" data-tool="image">
+        <i class="fas fa-image" aria-hidden="true"></i>
+        <span>Image Compressor</span>
+      </button>
+      <button class="tab-btn" id="tab-pdf" role="tab" aria-selected="false" aria-controls="panel-pdf" data-tool="pdf">
+        <i class="fas fa-file-pdf" aria-hidden="true"></i>
+        <span>PDF Compressor</span>
+      </button>
+      <button class="tab-btn" id="tab-zip" role="tab" aria-selected="false" aria-controls="panel-zip" data-tool="zip">
+        <i class="fas fa-file-zipper" aria-hidden="true"></i>
+        <span>ZIP Extractor</span>
+      </button>
+      <button class="tab-btn" id="tab-youtube" role="tab" aria-selected="false" aria-controls="panel-youtube" data-tool="youtube">
+        <i class="fab fa-youtube" aria-hidden="true"></i>
+        <span>YouTube MP3</span>
+      </button>
+    </div>
+
+    <!-- Tool Panels -->
+    <div class="tool-panels">
+      <!-- IMAGE COMPRESSOR -->
+      <section class="tool-panel active" id="panel-image" role="tabpanel" aria-labelledby="tab-image">
+        <div class="tool-layout">
+          <div class="tool-form-area">
+            <div class="tool-header">
+              <div class="tool-icon image">
+                <i class="fas fa-image" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="tool-title">Image Compressor</h2>
+                <p class="tool-desc">Reduce image file size while maintaining visual quality</p>
+              </div>
+            </div>
+
+            <div class="upload-zone" id="image-upload-zone" role="button" tabindex="0" aria-label="Drop image or click to upload">
+              <input type="file" id="image-file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden aria-label="Select image file">
+              <div class="upload-icon"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i></div>
+              <p class="upload-text">Drop image here or <span>browse</span></p>
+              <p class="upload-hint">Supports JPEG, PNG, WebP, GIF, AVIF · Max 100MB</p>
+            </div>
+
+            <div class="image-preview-container" id="image-preview-container" hidden>
+              <img id="image-preview" src="" alt="Preview of selected image" class="preview-img">
+              <div class="preview-info">
+                <span id="image-preview-name" class="file-name-label"></span>
+                <span id="image-original-size" class="file-size-label"></span>
+              </div>
+            </div>
+
+            <div class="options-grid" id="image-options">
+              <div class="option-group">
+                <label for="image-quality">Quality: <strong id="quality-value">80</strong>%</label>
+                <input type="range" id="image-quality" min="1" max="100" value="80" class="slider" aria-label="Image quality percentage">
+              </div>
+              <div class="option-group">
+                <label for="image-format">Output Format</label>
+                <select id="image-format" class="select-input" aria-label="Select output format">
+                  <option value="jpeg">JPEG (Best size)</option>
+                  <option value="webp">WebP (Modern)</option>
+                  <option value="png">PNG (Lossless)</option>
+                  <option value="avif">AVIF (Smallest)</option>
+                </select>
+              </div>
+              <div class="option-group">
+                <label for="image-max-width">Max Width (px)</label>
+                <input type="number" id="image-max-width" placeholder="e.g. 1920" class="text-input" min="1" max="10000" aria-label="Maximum width in pixels">
+              </div>
+              <div class="option-group">
+                <label for="image-max-height">Max Height (px)</label>
+                <input type="number" id="image-max-height" placeholder="e.g. 1080" class="text-input" min="1" max="10000" aria-label="Maximum height in pixels">
+              </div>
+            </div>
+
+            <button class="btn-primary full-width" id="compress-image-btn" disabled aria-label="Start image compression">
+              <i class="fas fa-compress-arrows-alt" aria-hidden="true"></i>
+              Compress Image
+            </button>
+          </div>
+
+          <div class="tool-result-area" id="image-result" hidden>
+            <!-- Result injected by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- PDF COMPRESSOR -->
+      <section class="tool-panel" id="panel-pdf" role="tabpanel" aria-labelledby="tab-pdf" hidden>
+        <div class="tool-layout">
+          <div class="tool-form-area">
+            <div class="tool-header">
+              <div class="tool-icon pdf">
+                <i class="fas fa-file-pdf" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="tool-title">PDF Compressor</h2>
+                <p class="tool-desc">Reduce PDF file size by removing unused data and optimizing structure</p>
+              </div>
+            </div>
+
+            <div class="upload-zone" id="pdf-upload-zone" role="button" tabindex="0" aria-label="Drop PDF or click to upload">
+              <input type="file" id="pdf-file-input" accept="application/pdf" hidden aria-label="Select PDF file">
+              <div class="upload-icon"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i></div>
+              <p class="upload-text">Drop PDF here or <span>browse</span></p>
+              <p class="upload-hint">PDF files only · Max 100MB</p>
+            </div>
+
+            <div class="file-selected-info" id="pdf-file-info" hidden>
+              <div class="file-card">
+                <i class="fas fa-file-pdf file-icon-sm" aria-hidden="true"></i>
+                <div>
+                  <span id="pdf-file-name" class="file-name-label">—</span>
+                  <span id="pdf-file-size" class="file-size-label">—</span>
+                </div>
+                <button class="btn-icon" id="pdf-clear-btn" aria-label="Remove selected PDF">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+
+            <button class="btn-primary full-width" id="compress-pdf-btn" disabled aria-label="Start PDF compression">
+              <i class="fas fa-compress" aria-hidden="true"></i>
+              Compress PDF
+            </button>
+          </div>
+
+          <div class="tool-result-area" id="pdf-result" hidden></div>
+        </div>
+      </section>
+
+      <!-- ZIP EXTRACTOR -->
+      <section class="tool-panel" id="panel-zip" role="tabpanel" aria-labelledby="tab-zip" hidden>
+        <div class="tool-layout">
+          <div class="tool-form-area">
+            <div class="tool-header">
+              <div class="tool-icon zip">
+                <i class="fas fa-file-zipper" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="tool-title">ZIP Extractor</h2>
+                <p class="tool-desc">Extract and download files from ZIP archives</p>
+              </div>
+            </div>
+
+            <div class="upload-zone" id="zip-upload-zone" role="button" tabindex="0" aria-label="Drop ZIP file or click to upload">
+              <input type="file" id="zip-file-input" accept=".zip,application/zip" hidden aria-label="Select ZIP file">
+              <div class="upload-icon"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i></div>
+              <p class="upload-text">Drop ZIP here or <span>browse</span></p>
+              <p class="upload-hint">ZIP archives only · Max 100MB</p>
+            </div>
+
+            <div class="file-selected-info" id="zip-file-info" hidden>
+              <div class="file-card">
+                <i class="fas fa-file-zipper file-icon-sm" aria-hidden="true"></i>
+                <div>
+                  <span id="zip-file-name" class="file-name-label">—</span>
+                  <span id="zip-file-size" class="file-size-label">—</span>
+                </div>
+                <button class="btn-icon" id="zip-clear-btn" aria-label="Remove selected ZIP">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+
+            <button class="btn-primary full-width" id="extract-zip-btn" disabled aria-label="Start ZIP extraction">
+              <i class="fas fa-file-export" aria-hidden="true"></i>
+              Extract ZIP
+            </button>
+          </div>
+
+          <div class="tool-result-area" id="zip-result" hidden></div>
+        </div>
+      </section>
+
+      <!-- YOUTUBE MP3 -->
+      <section class="tool-panel" id="panel-youtube" role="tabpanel" aria-labelledby="tab-youtube" hidden>
+        <div class="tool-layout">
+          <div class="tool-form-area">
+            <div class="tool-header">
+              <div class="tool-icon youtube">
+                <i class="fab fa-youtube" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="tool-title">YouTube MP3 Downloader</h2>
+                <p class="tool-desc">Extract high-quality audio from any YouTube video</p>
+              </div>
+            </div>
+
+            <div class="url-input-group">
+              <label for="youtube-url-input" class="url-label">
+                <i class="fab fa-youtube" aria-hidden="true"></i>
+                YouTube URL
+              </label>
+              <div class="url-input-wrapper">
+                <input type="url" id="youtube-url-input" class="url-input" placeholder="https://www.youtube.com/watch?v=..." aria-label="Enter YouTube video URL">
+                <button class="btn-fetch" id="fetch-info-btn" aria-label="Fetch video information">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+                  Fetch Info
+                </button>
+              </div>
+            </div>
+
+            <div class="video-info-card" id="video-info" hidden>
+              <img id="video-thumbnail" src="" alt="Video thumbnail" class="video-thumb">
+              <div class="video-details">
+                <h3 id="video-title" class="video-title-text">—</h3>
+                <p id="video-author" class="video-meta">—</p>
+                <p id="video-duration" class="video-meta">—</p>
+              </div>
+            </div>
+
+            <button class="btn-primary full-width youtube-btn" id="download-mp3-btn" disabled aria-label="Download audio as MP3">
+              <i class="fas fa-music" aria-hidden="true"></i>
+              Download MP3
+            </button>
+
+            <p class="disclaimer">
+              <i class="fas fa-info-circle" aria-hidden="true"></i>
+              For personal use only. Respect copyright laws and YouTube's Terms of Service.
+            </p>
+          </div>
+
+          <div class="tool-result-area" id="youtube-result" hidden></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-header">
+      <span class="section-badge">Why Choose Us</span>
+      <h2 class="section-title">Built for Performance & Privacy</h2>
+    </div>
+    <div class="features-grid">
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-shield-halved"></i></div>
+        <h3>Privacy First</h3>
+        <p>Files are processed on our servers and deleted within 1 hour. We never share your data.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
+        <h3>Lightning Fast</h3>
+        <p>Optimized compression algorithms deliver results in seconds, not minutes.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-lock"></i></div>
+        <h3>Secure Transfer</h3>
+        <p>All uploads and downloads use encrypted connections with strict file type validation.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-infinity"></i></div>
+        <h3>No Limits</h3>
+        <p>Use all tools without registration. Up to 100MB per file, 20 operations per minute.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-mobile-screen"></i></div>
+        <h3>Works Everywhere</h3>
+        <p>Fully responsive design works perfectly on desktop, tablet, and mobile devices.</p>
+      </article>
+      <article class="feature-card">
+        <div class="feature-icon" aria-hidden="true"><i class="fas fa-chart-line"></i></div>
+        <h3>High Quality</h3>
+        <p>Advanced compression preserves image quality while dramatically reducing file sizes.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-section" id="how-it-works">
+    <div class="section-header">
+      <span class="section-badge">Simple Process</span>
+      <h2 class="section-title">How It Works</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-number" aria-hidden="true">01</div>
+        <h3>Upload Your File</h3>
+        <p>Drag &amp; drop or click to select. Supports images, PDFs, and ZIP archives.</p>
+      </div>
+      <div class="step-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+      <div class="step-card">
+        <div class="step-number" aria-hidden="true">02</div>
+        <h3>Process & Optimize</h3>
+        <p>Our servers process your file using state-of-the-art compression algorithms.</p>
+      </div>
+      <div class="step-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+      <div class="step-card">
+        <div class="step-number" aria-hidden="true">03</div>
+        <h3>Download Result</h3>
+        <p>Download your optimized file instantly. Files are deleted after 1 hour.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <div class="brand-icon" aria-hidden="true"><i class="fas fa-toolbox"></i></div>
+        <span class="brand-name">ToolBox <span class="brand-pro">Pro</span></span>
+      </div>
+      <p class="footer-desc">Free, fast, and secure online file tools for everyone.</p>
+      <div class="footer-links">
+        <a href="#tools">Tools</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+      </div>
+      <p class="footer-copy">&copy; 2024 ToolBox Pro. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Progress Overlay -->
+  <div class="progress-overlay" id="progress-overlay" hidden role="status" aria-label="Processing file">
+    <div class="progress-modal">
+      <div class="progress-spinner" aria-hidden="true"></div>
+      <p class="progress-text" id="progress-text">Processing...</p>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
