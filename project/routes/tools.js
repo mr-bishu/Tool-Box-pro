@@ -5,8 +5,7 @@ const fs = require('fs');
 const sharp = require('sharp');
 const { PDFDocument } = require('pdf-lib');
 const unzipper = require('unzipper');
-const ytdl = require('ytdl-core');
-const { body, validationResult, query } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const { v4: uuidv4 } = require('uuid');
 const { queries } = require('../db/database');
 
@@ -118,7 +117,52 @@ router.post('/compress-image', imageUpload.single('image'), async (req, res) => 
   }
 });
 
-// ─── 2. PDF COMPRESSION ──────────────────────────────────────────────────────
+// ─── 2. PASSPORT PHOTO CREATOR ───────────────────────────────────────────────
+const passportPhotoSizes = {
+  '35x45': { width: 413, height: 531, label: '35 x 45 mm' },
+  '2x2': { width: 600, height: 600, label: '2 x 2 in' }
+};
+
+router.post('/passport-photo', imageUpload.single('image'), async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No photo provided' });
+
+  const size = passportPhotoSizes[req.body.size];
+  if (!size) {
+    cleanupFile(req.file.path);
+    return res.status(400).json({ error: 'Choose a supported passport photo size' });
+  }
+
+  const outputName = `passport_${uuidv4()}.jpg`;
+  const outputPath = path.join(__dirname, '..', 'uploads', 'images', outputName);
+
+  try {
+    const info = await sharp(req.file.path)
+      .rotate()
+      .resize(size.width, size.height, { fit: 'cover', position: sharp.strategy.attention })
+      .flatten({ background: '#ffffff' })
+      .jpeg({ quality: 95 })
+      .withMetadata({ density: 300 })
+      .toFile(outputPath);
+
+    recordOp(req, 'passport_photo', req.file.size, info.size, req.file.originalname);
+    cleanupFile(req.file.path);
+
+    res.json({
+      success: true,
+      width: info.width,
+      height: info.height,
+      size: size.label,
+      downloadUrl: `/api/tools/download?file=${encodeURIComponent(outputName)}&type=image`
+    });
+  } catch (err) {
+    cleanupFile(req.file.path);
+    cleanupFile(outputPath);
+    recordOp(req, 'passport_photo', req.file.size, 0, req.file.originalname, 'error');
+    res.status(500).json({ error: 'Passport photo creation failed: ' + err.message });
+  }
+});
+
+// ─── 3. PDF COMPRESSION ──────────────────────────────────────────────────────
 router.post('/compress-pdf', pdfUpload.single('pdf'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No PDF file provided' });
 
@@ -168,7 +212,7 @@ router.post('/compress-pdf', pdfUpload.single('pdf'), async (req, res) => {
   }
 });
 
-// ─── 3. ZIP EXTRACTOR (Extract PDFs from ZIP) ─────────────────────────────────
+// ─── 4. ZIP EXTRACTOR (Extract PDFs from ZIP) ─────────────────────────────────
 router.post('/extract-zip', zipUpload.single('zip'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No ZIP file provided' });
 
@@ -225,121 +269,6 @@ router.post('/extract-zip', zipUpload.single('zip'), async (req, res) => {
     res.status(500).json({ error: 'ZIP extraction failed: ' + err.message });
   }
 });
-
-// ─── 4. YOUTUBE MP3 DOWNLOADER ────────────────────────────────────────────────
-router.post('/youtube-info',
-  [body('url').isURL().withMessage('Invalid YouTube URL')],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
-
-    const { url } = req.body;
-
-    // Validate it's a YouTube URL
-    if (!ytdl.validateURL(url)) {
-      return res.status(400).json({ error: 'Invalid or unsupported YouTube URL' });
-    }
-
-    try {
-      const info = await ytdl.getBasicInfo(url, {
-        requestOptions: {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-          }
-        }
-      });
-      const videoDetails = info.videoDetails;
-
-      res.json({
-        success: true,
-        title: videoDetails.title,
-        author: videoDetails.author?.name || 'Unknown',
-        duration: parseInt(videoDetails.lengthSeconds),
-        thumbnail: videoDetails.thumbnails?.slice(-1)[0]?.url || '',
-        viewCount: videoDetails.viewCount
-      });
-    } catch (err) {
-      res.status(500).json({ error: 'Could not fetch video info: ' + err.message });
-    }
-  }
-);
-
-router.post('/youtube-download',
-  [body('url').isURL().withMessage('Invalid YouTube URL')],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array()[0].msg });
-
-    const { url } = req.body;
-
-    if (!ytdl.validateURL(url)) {
-      return res.status(400).json({ error: 'Invalid or unsupported YouTube URL' });
-    }
-
-    try {
-      const info = await ytdl.getBasicInfo(url);
-      const title = info.videoDetails.title.replace(/[^a-zA-Z0-9 _-]/g, '').trim().substring(0, 80);
-      const outputName = `${uuidv4()}_${title}.mp3`;
-      const outputPath = path.join(__dirname, '..', 'uploads', 'audio', outputName);
-
-      res.json({
-        success: true,
-        message: 'Starting download...',
-        downloadUrl: `/api/tools/stream-audio?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`
-      });
-
-    } catch (err) {
-      recordOp(req, 'youtube_mp3', 0, 0, url, 'error');
-      res.status(500).json({ error: 'YouTube download failed: ' + err.message });
-    }
-  }
-);
-
-// Stream audio directly (no server-side storage needed)
-router.get('/stream-audio',
-  [query('url').isURL()],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ error: 'Invalid URL' });
-
-    const { url, title } = req.query;
-
-    if (!ytdl.validateURL(url)) {
-      return res.status(400).json({ error: 'Invalid YouTube URL' });
-    }
-
-    try {
-      const safeTitle = (title || 'audio').replace(/[^a-zA-Z0-9 _-]/g, '').trim();
-      res.setHeader('Content-Disposition', `attachment; filename="${safeTitle}.mp3"`);
-      res.setHeader('Content-Type', 'audio/mpeg');
-
-      const stream = ytdl(url, {
-        filter: 'audioonly',
-        quality: 'highestaudio',
-        requestOptions: {
-          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-        }
-      });
-
-      stream.on('response', (response) => {
-        recordOp(req, 'youtube_mp3', parseInt(response.headers['content-length'] || 0), 0, safeTitle);
-      });
-
-      stream.on('error', (err) => {
-        console.error('Stream error:', err.message);
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Stream failed' });
-        }
-      });
-
-      stream.pipe(res);
-    } catch (err) {
-      if (!res.headersSent) {
-        res.status(500).json({ error: 'Audio streaming failed: ' + err.message });
-      }
-    }
-  }
-);
 
 // ─── 5. FILE DOWNLOAD ENDPOINT ────────────────────────────────────────────────
 router.get('/download', (req, res) => {

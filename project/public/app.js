@@ -444,116 +444,75 @@ function resetZipTool() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 4. YOUTUBE MP3
+// 4. PASSPORT PHOTO CREATOR
 // ─────────────────────────────────────────────────────────────────────────────
-let videoInfoData = null;
+let passportPhotoFile = null;
 
-$('fetch-info-btn').addEventListener('click', fetchVideoInfo);
-$('youtube-url-input').addEventListener('keydown', e => { if (e.key === 'Enter') fetchVideoInfo(); });
+setupUploadZone('passport-upload-zone', 'passport-file-input', (file) => {
+  if (!file.type.startsWith('image/')) return toast.error('Please select an image file.');
 
-async function fetchVideoInfo() {
-  const url = $('youtube-url-input').value.trim();
-  if (!url) return toast.error('Please enter a YouTube URL.');
-  if (!url.includes('youtube.com/') && !url.includes('youtu.be/')) {
-    return toast.error('Please enter a valid YouTube URL.');
-  }
+  passportPhotoFile = file;
+  const reader = new FileReader();
+  reader.onload = (event) => {
+    $('passport-preview').src = event.target.result;
+    $('passport-preview-container').hidden = false;
+    $('passport-preview-name').textContent = file.name;
+    $('passport-original-size').textContent = formatBytes(file.size);
+  };
+  reader.readAsDataURL(file);
+  $('create-passport-btn').disabled = false;
+  $('passport-upload-zone').hidden = true;
+  $('passport-result').hidden = true;
+});
 
-  const btn = $('fetch-info-btn');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Fetching...';
-  btn.disabled = true;
-  $('video-info').hidden = true;
-  $('download-mp3-btn').disabled = true;
-  $('youtube-result').hidden = true;
+$('create-passport-btn').addEventListener('click', async () => {
+  if (!passportPhotoFile) return toast.error('Please select a portrait photo first.');
+
+  const formData = new FormData();
+  formData.append('image', passportPhotoFile);
+  formData.append('size', $('passport-size').value);
+  const button = $('create-passport-btn');
+  button.disabled = true;
+  progress.show('Creating passport photo...');
 
   try {
-    const data = await apiPost('/api/tools/youtube-info', JSON.stringify({ url }));
-    // Re-do with proper content type
-    const res = await fetch('/api/tools/youtube-info', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
-      credentials: 'same-origin'
-    });
-    const info = await res.json();
-
-    if (!res.ok) throw new Error(info.error || 'Failed to fetch info');
-
-    videoInfoData = { ...info, url };
-    $('video-thumbnail').src = info.thumbnail || '';
-    $('video-thumbnail').alt = `Thumbnail for ${info.title}`;
-    $('video-title').textContent = info.title;
-    $('video-author').textContent = `👤 ${info.author}`;
-    $('video-duration').textContent = `⏱ ${formatDuration(info.duration)} · ${parseInt(info.viewCount || 0).toLocaleString()} views`;
-    $('video-info').hidden = false;
-    $('download-mp3-btn').disabled = false;
-    toast.success('Video info loaded!');
-  } catch (err) {
-    toast.error('Could not fetch video info: ' + err.message);
-  } finally {
-    btn.innerHTML = '<i class="fas fa-search" aria-hidden="true"></i> Fetch Info';
-    btn.disabled = false;
-  }
-}
-
-$('download-mp3-btn').addEventListener('click', async () => {
-  const url = $('youtube-url-input').value.trim();
-  if (!url || !videoInfoData) return toast.error('Please fetch video info first.');
-
-  progress.show('Preparing MP3 download...');
-  try {
-    const res = await fetch('/api/tools/youtube-download', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url }),
-      credentials: 'same-origin'
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error);
-
+    const data = await apiPost('/api/tools/passport-photo', formData);
     progress.hide();
-    renderResult('youtube-result', `
+    renderResult('passport-result', `
       <div class="result-header">
         <div class="result-title result-success">
-          <i class="fas fa-music" aria-hidden="true"></i> MP3 Ready to Download!
+          <i class="fas fa-check-circle" aria-hidden="true"></i> Passport Photo Ready
         </div>
       </div>
-      <div class="video-info-card" style="margin:16px 0;">
-        <img src="${videoInfoData.thumbnail}" alt="Thumbnail" class="video-thumb">
-        <div class="video-details">
-          <h3 class="video-title-text">${videoInfoData.title}</h3>
-          <p class="video-meta">${videoInfoData.author}</p>
-          <p class="video-meta">${formatDuration(videoInfoData.duration)}</p>
-        </div>
-      </div>
-      <a href="${data.downloadUrl}" class="btn-download" style="width:100%;justify-content:center" id="mp3-download-link">
-        <i class="fas fa-download" aria-hidden="true"></i>
-        Download MP3
-      </a>
-      <p class="disclaimer" style="margin-top:12px;">
-        <i class="fas fa-info-circle" aria-hidden="true"></i>
-        Download will start in a new request. Large files may take a moment.
+      <p style="font-size:0.9rem;color:var(--text-secondary);margin-bottom:18px">
+        ${data.size} · ${data.width} × ${data.height}px · 300 DPI · JPEG
       </p>
-      <button class="btn-ghost" style="width:100%;margin-top:10px;justify-content:center" id="yt-reset-btn">
-        <i class="fas fa-redo" aria-hidden="true"></i> Download Another
+      <a href="${data.downloadUrl}" class="btn-download" download="passport-photo.jpg" style="width:100%;justify-content:center">
+        <i class="fas fa-download" aria-hidden="true"></i> Download Photo
+      </a>
+      <button class="btn-ghost" style="width:100%;margin-top:10px;justify-content:center" id="passport-reset-btn">
+        <i class="fas fa-redo" aria-hidden="true"></i> Create Another
       </button>
     `);
-
-    document.getElementById('yt-reset-btn')?.addEventListener('click', resetYtTool);
-    toast.success('Click "Download MP3" to save the audio file!', 6000);
-
+    $('passport-reset-btn').addEventListener('click', resetPassportTool);
+    toast.success('Passport photo created.');
   } catch (err) {
     progress.hide();
-    renderError('youtube-result', err.message);
-    toast.error('Download failed: ' + err.message);
+    renderError('passport-result', err.message);
+    toast.error('Photo creation failed: ' + err.message);
+  } finally {
+    button.disabled = false;
   }
 });
 
-function resetYtTool() {
-  videoInfoData = null;
-  $('youtube-url-input').value = '';
-  $('video-info').hidden = true;
-  $('download-mp3-btn').disabled = true;
-  $('youtube-result').hidden = true;
+function resetPassportTool() {
+  passportPhotoFile = null;
+  $('passport-file-input').value = '';
+  $('passport-preview').src = '';
+  $('passport-preview-container').hidden = true;
+  $('passport-upload-zone').hidden = false;
+  $('passport-result').hidden = true;
+  $('create-passport-btn').disabled = true;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

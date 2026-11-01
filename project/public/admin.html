@@ -300,7 +300,7 @@
     .tool-pill.image  { background: rgba(6,182,212,0.12); color: var(--accent-cyan); }
     .tool-pill.pdf    { background: rgba(239,68,68,0.12); color: var(--accent-red); }
     .tool-pill.zip    { background: rgba(245,158,11,0.12); color: var(--accent-orange); }
-    .tool-pill.youtube{ background: rgba(239,68,68,0.12); color: #ff4444; }
+    .tool-pill.passport{ background: rgba(6,182,212,0.12); color: var(--accent-cyan); }
 
     .status-dot {
       display: inline-flex; align-items: center; gap: 5px;
@@ -335,7 +335,7 @@
     .tool-bar-fill.image  { background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue)); }
     .tool-bar-fill.pdf    { background: linear-gradient(90deg, var(--accent-red), var(--accent-orange)); }
     .tool-bar-fill.zip    { background: linear-gradient(90deg, var(--accent-orange), #fbbf24); }
-    .tool-bar-fill.youtube{ background: linear-gradient(90deg, #c4302b, #ff0000); }
+    .tool-bar-fill.passport{ background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green)); }
 
     /* ─── Sessions Cards ─── */
     .session-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 14px; }
@@ -627,9 +627,9 @@
           <div class="filter-bar" id="ops-filters">
             <button class="filter-btn active" data-tool="" aria-pressed="true">All</button>
             <button class="filter-btn" data-tool="image_compression" aria-pressed="false">Images</button>
+            <button class="filter-btn" data-tool="passport_photo" aria-pressed="false">Passport Photos</button>
             <button class="filter-btn" data-tool="pdf_compression" aria-pressed="false">PDFs</button>
             <button class="filter-btn" data-tool="zip_extraction" aria-pressed="false">ZIP</button>
-            <button class="filter-btn" data-tool="youtube_mp3" aria-pressed="false">YouTube</button>
           </div>
           <div style="overflow-x:auto">
             <table class="data-table" id="ops-table" aria-label="Operations log">
@@ -718,9 +718,9 @@ const timeAgo = dateStr => {
 };
 const toolLabel = tool => ({
   image_compression: { label: 'Image', cls: 'image', icon: 'fa-image' },
+  passport_photo: { label: 'Passport Photo', cls: 'passport', icon: 'fa-id-card' },
   pdf_compression: { label: 'PDF', cls: 'pdf', icon: 'fa-file-pdf' },
-  zip_extraction: { label: 'ZIP', cls: 'zip', icon: 'fa-file-zipper' },
-  youtube_mp3: { label: 'YouTube', cls: 'youtube', icon: 'fa-youtube fab' }
+  zip_extraction: { label: 'ZIP', cls: 'zip', icon: 'fa-file-zipper' }
 }[tool] || { label: tool, cls: '', icon: 'fa-tool' });
 
 async function api(path, opts = {}) {

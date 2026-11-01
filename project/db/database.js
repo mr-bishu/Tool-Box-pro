@@ -51,7 +51,6 @@ db.exec(`
     image_compressions INTEGER DEFAULT 0,
     pdf_compressions INTEGER DEFAULT 0,
     pdf_extractions INTEGER DEFAULT 0,
-    mp3_downloads INTEGER DEFAULT 0,
     bytes_saved INTEGER DEFAULT 0
   );
 

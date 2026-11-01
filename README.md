@@ -1,7 +1,7 @@
 # ToolBox Pro 🧰
 
 > **All-in-One File Processing Web Application**  
-> Compress images, optimize PDFs, extract ZIP archives, and download YouTube audio — all in one beautiful, privacy-first platform.
+> Compress images, create passport photos, optimize PDFs, and extract ZIP archives in one privacy-first platform.
 
 ![Node.js](https://img.shields.io/badge/Node.js-v24+-green?logo=node.js)
 ![Express](https://img.shields.io/badge/Express-4.18-blue?logo=express)
@@ -15,6 +15,7 @@
 | Tool | Description |
 |------|-------------|
 | 🖼️ **Image Compressor** | Compress JPEG, PNG, WebP, AVIF, GIF with quality control & resize |
+| 🪪 **Passport Photo** | Create 35 × 45 mm or 2 × 2 in photos at 300 DPI |
 | 📄 **PDF Compressor** | Optimize PDFs by stripping metadata and compressing structure |
 | 🗜️ **ZIP Extractor** | Extract files from ZIP archives (PDFs, images, docs) |
 | 🔐 **Admin Dashboard** | Monitor users, operations, and stats in real-time |
@@ -91,7 +92,7 @@ Access the admin dashboard at **http://localhost:3000/admin**
 ├── middleware/
 │   └── stats.js           # Session & page view tracking
 ├── routes/
-│   ├── tools.js           # Tool APIs (image, pdf, zip, youtube)
+│   ├── tools.js           # Tool APIs (image, passport photo, pdf, zip)
 │   └── admin.js           # Admin auth & dashboard APIs
 └── public/
     ├── index.html         # Main tool page
@@ -120,7 +121,6 @@ MAX_FILE_SIZE=100          # Max upload size in MB
 - **Image Processing:** Sharp
 - **PDF Processing:** pdf-lib
 - **ZIP:** unzipper
-- **YouTube:** ytdl-core
 - **Security:** Helmet, express-rate-limit, bcryptjs, express-validator
 - **Frontend:** Vanilla HTML/CSS/JS (Dark Glassmorphism design)
 

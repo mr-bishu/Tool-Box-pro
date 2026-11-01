@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="ToolBox Pro - Free online tools for image compression, PDF compression, ZIP extraction, and YouTube MP3 download. Fast, secure, and easy to use.">
-  <meta name="keywords" content="image compressor, pdf compressor, zip extractor, youtube mp3 downloader, online tools">
+  <meta name="description" content="ToolBox Pro - Free online tools for image compression, passport photo creation, PDF compression, and ZIP extraction.">
+  <meta name="keywords" content="image compressor, passport photo maker, pdf compressor, zip extractor, online tools">
   <meta name="robots" content="index, follow">
   <meta property="og:title" content="ToolBox Pro - All-in-One File Tools">
-  <meta property="og:description" content="Compress images, optimize PDFs, extract ZIP files, and download YouTube audio — all in one place.">
+  <meta property="og:description" content="Compress images, create passport photos, optimize PDFs, and extract ZIP files — all in one place.">
   <meta property="og:type" content="website">
   <title>ToolBox Pro — All-in-One File Tools</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +56,7 @@
         <span class="gradient-text">File Toolbox</span>
       </h1>
       <p class="hero-subtitle">
-        Compress images &amp; PDFs, extract ZIP archives, and download YouTube audio — all in one powerful, privacy-first platform.
+        Compress images &amp; PDFs, create passport photos, and extract ZIP archives in one privacy-first platform.
       </p>
       <div class="hero-stats" role="list">
         <div class="stat-item" role="listitem">
@@ -103,10 +103,10 @@
         <div class="savings-badge">-67%</div>
       </div>
       <div class="floating-card card-3">
-        <i class="fab fa-youtube"></i>
+        <i class="fas fa-id-card"></i>
         <div class="card-info">
-          <span>Song.mp3</span>
-          <small>Downloaded</small>
+          <span>Passport photo</span>
+          <small>35 × 45 mm</small>
         </div>
         <div class="savings-badge green"><i class="fas fa-check"></i></div>
       </div>
@@ -127,6 +127,10 @@
         <i class="fas fa-image" aria-hidden="true"></i>
         <span>Image Compressor</span>
       </button>
+      <button class="tab-btn" id="tab-passport" role="tab" aria-selected="false" aria-controls="panel-passport" data-tool="passport">
+        <i class="fas fa-id-card" aria-hidden="true"></i>
+        <span>Passport Photo</span>
+      </button>
       <button class="tab-btn" id="tab-pdf" role="tab" aria-selected="false" aria-controls="panel-pdf" data-tool="pdf">
         <i class="fas fa-file-pdf" aria-hidden="true"></i>
         <span>PDF Compressor</span>
@@ -134,10 +138,6 @@
       <button class="tab-btn" id="tab-zip" role="tab" aria-selected="false" aria-controls="panel-zip" data-tool="zip">
         <i class="fas fa-file-zipper" aria-hidden="true"></i>
         <span>ZIP Extractor</span>
-      </button>
-      <button class="tab-btn" id="tab-youtube" role="tab" aria-selected="false" aria-controls="panel-youtube" data-tool="youtube">
-        <i class="fab fa-youtube" aria-hidden="true"></i>
-        <span>YouTube MP3</span>
       </button>
     </div>
 
@@ -205,6 +205,54 @@
           <div class="tool-result-area" id="image-result" hidden>
             <!-- Result injected by JS -->
           </div>
+        </div>
+      </section>
+
+      <!-- PASSPORT PHOTO CREATOR -->
+      <section class="tool-panel" id="panel-passport" role="tabpanel" aria-labelledby="tab-passport" hidden>
+        <div class="tool-layout">
+          <div class="tool-form-area">
+            <div class="tool-header">
+              <div class="tool-icon passport">
+                <i class="fas fa-id-card" aria-hidden="true"></i>
+              </div>
+              <div>
+                <h2 class="tool-title">Passport Photo Creator</h2>
+                <p class="tool-desc">Crop and format a photo to a standard passport size</p>
+              </div>
+            </div>
+
+            <div class="upload-zone" id="passport-upload-zone" role="button" tabindex="0" aria-label="Drop a portrait photo or click to upload">
+              <input type="file" id="passport-file-input" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" hidden aria-label="Select portrait photo">
+              <div class="upload-icon"><i class="fas fa-cloud-upload-alt" aria-hidden="true"></i></div>
+              <p class="upload-text">Drop portrait photo here or <span>browse</span></p>
+              <p class="upload-hint">JPEG, PNG, WebP, GIF, or AVIF · Max 100MB</p>
+            </div>
+
+            <div class="image-preview-container" id="passport-preview-container" hidden>
+              <img id="passport-preview" src="" alt="Selected portrait photo" class="preview-img">
+              <div class="preview-info">
+                <span id="passport-preview-name" class="file-name-label"></span>
+                <span id="passport-original-size" class="file-size-label"></span>
+              </div>
+            </div>
+
+            <div class="option-group" style="margin-bottom:20px">
+              <label for="passport-size">Photo size</label>
+              <select id="passport-size" class="select-input" aria-label="Choose passport photo size">
+                <option value="35x45">35 × 45 mm · 413 × 531 px</option>
+                <option value="2x2">2 × 2 in · 600 × 600 px</option>
+              </select>
+            </div>
+
+            <button class="btn-primary full-width" id="create-passport-btn" disabled aria-label="Create passport photo">
+              <i class="fas fa-id-card" aria-hidden="true"></i>
+              Create Passport Photo
+            </button>
+            <p class="disclaimer"><i class="fas fa-info-circle" aria-hidden="true"></i>Uses a centered crop and white background. Confirm your destination's photo rules before submitting.</p>
+          </div>
+
+          <div class="tool-result-area" id="passport-result" hidden></div>
         </div>
       </section>
 
@@ -296,57 +344,6 @@
         </div>
       </section>
 
-      <!-- YOUTUBE MP3 -->
-      <section class="tool-panel" id="panel-youtube" role="tabpanel" aria-labelledby="tab-youtube" hidden>
-        <div class="tool-layout">
-          <div class="tool-form-area">
-            <div class="tool-header">
-              <div class="tool-icon youtube">
-                <i class="fab fa-youtube" aria-hidden="true"></i>
-              </div>
-              <div>
-                <h2 class="tool-title">YouTube MP3 Downloader</h2>
-                <p class="tool-desc">Extract high-quality audio from any YouTube video</p>
-              </div>
-            </div>
-
-            <div class="url-input-group">
-              <label for="youtube-url-input" class="url-label">
-                <i class="fab fa-youtube" aria-hidden="true"></i>
-                YouTube URL
-              </label>
-              <div class="url-input-wrapper">
-                <input type="url" id="youtube-url-input" class="url-input" placeholder="https://www.youtube.com/watch?v=..." aria-label="Enter YouTube video URL">
-                <button class="btn-fetch" id="fetch-info-btn" aria-label="Fetch video information">
-                  <i class="fas fa-search" aria-hidden="true"></i>
-                  Fetch Info
-                </button>
-              </div>
-            </div>
-
-            <div class="video-info-card" id="video-info" hidden>
-              <img id="video-thumbnail" src="" alt="Video thumbnail" class="video-thumb">
-              <div class="video-details">
-                <h3 id="video-title" class="video-title-text">—</h3>
-                <p id="video-author" class="video-meta">—</p>
-                <p id="video-duration" class="video-meta">—</p>
-              </div>
-            </div>
-
-            <button class="btn-primary full-width youtube-btn" id="download-mp3-btn" disabled aria-label="Download audio as MP3">
-              <i class="fas fa-music" aria-hidden="true"></i>
-              Download MP3
-            </button>
-
-            <p class="disclaimer">
-              <i class="fas fa-info-circle" aria-hidden="true"></i>
-              For personal use only. Respect copyright laws and YouTube's Terms of Service.
-            </p>
-          </div>
-
-          <div class="tool-result-area" id="youtube-result" hidden></div>
-        </div>
-      </section>
     </div>
   </main>
 
