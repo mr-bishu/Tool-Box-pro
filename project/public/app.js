@@ -86,9 +86,18 @@ const progress = (() => {
 })();
 
 // ─── Upload Zone Helper ───────────────────────────────────────────────────────
-function setupUploadZone(zoneId, inputId, onFileSelected) {
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
+function setupUploadZone(zoneId, inputId, onSelected) {
   const zone = $(zoneId);
   const input = $(inputId);
+  const onFileSelected = file => {
+    if (file.size > MAX_UPLOAD_BYTES) {
+      input.value = '';
+      return toast.error(`"${file.name}" is ${formatBytes(file.size)}. The maximum file size is 4 MB.`);
+    }
+    onSelected(file);
+  };
 
   zone.addEventListener('click', () => input.click());
   zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') input.click(); });
@@ -559,6 +568,14 @@ async function loadStats() {
 
 // Animate with default values on load
 document.addEventListener('DOMContentLoaded', () => {
+  // Record the page view for the admin dashboard
+  fetch('/api/track', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ page: location.pathname, referrer: document.referrer }),
+    credentials: 'same-origin'
+  }).catch(() => {});
+
   // Show some placeholder animations even without login
   setTimeout(() => {
     animateNumber($('stat-users'), 0, 1243);
