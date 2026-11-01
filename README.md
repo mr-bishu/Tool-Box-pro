@@ -17,7 +17,6 @@
 | 🖼️ **Image Compressor** | Compress JPEG, PNG, WebP, AVIF, GIF with quality control & resize |
 | 📄 **PDF Compressor** | Optimize PDFs by stripping metadata and compressing structure |
 | 🗜️ **ZIP Extractor** | Extract files from ZIP archives (PDFs, images, docs) |
-| 🎵 **YouTube MP3** | Download high-quality audio from any YouTube video |
 | 🔐 **Admin Dashboard** | Monitor users, operations, and stats in real-time |
 
 ---
